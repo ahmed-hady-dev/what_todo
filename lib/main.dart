@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:what_todo/view/home/home_view.dart';
+import 'view/home/controller/home_cubit.dart';
+import 'view/home/home_view.dart';
 
 import 'core/blocObserver/bloc_observer.dart';
 import 'core/cacheHelper/cache_helper.dart';
@@ -14,10 +15,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //===============================================================
   DioHelper.init();
-  BlocOverrides.runZoned(
-    () {},
-    blocObserver: MyBlocObserver(),
-  );
   //===============================================================
   await EasyLocalization.ensureInitialized();
   //===============================================================
@@ -26,12 +23,17 @@ void main() async {
       await CacheHelper.saveData(key: 'isDark', value: false);
   bool? isDark = CacheHelper.get(key: 'isDark');
   //===============================================================
-  runApp(EasyLocalization(
-    child: MyApp(isDark: isDark!),
-    path: 'assets/translation',
-    supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],
-    fallbackLocale: const Locale('en', 'US'),
-  ));
+  BlocOverrides.runZoned(
+    () {
+      runApp(EasyLocalization(
+        child: MyApp(isDark: isDark!),
+        path: 'assets/translation',
+        supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],
+        fallbackLocale: const Locale('en', 'US'),
+      ));
+    },
+    blocObserver: MyBlocObserver(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -46,6 +48,9 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               ThemeCubit()..changeTheme(themeModeFromCache: isDark),
         ),
+        BlocProvider(
+          create: (context) => HomeCubit(),
+        )
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

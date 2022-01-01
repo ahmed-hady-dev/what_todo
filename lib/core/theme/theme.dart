@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
+import '../../constants/app_colors.dart';
 
 ThemeData lightTheme(BuildContext context) {
   return ThemeData.light().copyWith(
     brightness: Brightness.light,
     dividerColor: Colors.black,
+    scaffoldBackgroundColor: AppColors.lightScaffoldColor,
     colorScheme: Theme.of(context).colorScheme.copyWith(primary: Colors.black),
-    textTheme: ThemeData.light().textTheme.apply(
+    textTheme: ThemeData.light()
+        .textTheme
+        .apply(
           fontFamily: 'NunitoSans',
-        ),
+        )
+        .copyWith(
+            headline5: Theme.of(context)
+                .textTheme
+                .headline5!
+                .copyWith(color: AppColors.darkBlueColor)),
     primaryTextTheme: ThemeData.light().textTheme.apply(
           fontFamily: 'NunitoSans',
         ),
-    inputDecorationTheme: InputDecorationTheme(
+    inputDecorationTheme: const InputDecorationTheme(
       focusColor: Colors.black,
-      border: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.black),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.black),
-        borderRadius: BorderRadius.circular(50),
-      ),
+      border: InputBorder.none,
+      focusedBorder: InputBorder.none,
+      errorBorder: InputBorder.none,
+      enabledBorder: InputBorder.none,
     ),
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: Colors.black,
@@ -39,26 +44,30 @@ ThemeData lightTheme(BuildContext context) {
 //===============================================================
 ThemeData darkTheme(BuildContext context) {
   return ThemeData.dark().copyWith(
+    scaffoldBackgroundColor: AppColors.darkScaffoldColor,
     colorScheme: Theme.of(context).colorScheme.copyWith(primary: Colors.grey),
-    textTheme: ThemeData.dark().textTheme.apply(
+    textTheme: ThemeData.dark()
+        .textTheme
+        .apply(
           fontFamily: 'NunitoSans',
-        ),
+        )
+        .copyWith(
+            headline5: Theme.of(context)
+                .textTheme
+                .headline5!
+                .copyWith(color: Colors.white)),
     primaryTextTheme: ThemeData.dark().textTheme.apply(
           fontFamily: 'NunitoSans',
         ),
     textSelectionTheme: const TextSelectionThemeData(
       cursorColor: Colors.grey,
     ),
-    inputDecorationTheme: InputDecorationTheme(
-      focusColor: Colors.grey,
-      border: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.grey),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Colors.grey),
-        borderRadius: BorderRadius.circular(50),
-      ),
+    inputDecorationTheme: const InputDecorationTheme(
+      focusColor: Colors.black,
+      border: InputBorder.none,
+      focusedBorder: InputBorder.none,
+      errorBorder: InputBorder.none,
+      enabledBorder: InputBorder.none,
     ),
     brightness: Brightness.dark,
     dividerColor: Colors.white,

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hady.dev.what_todo">
    <application
-        android:label="what_todo"
+        android:label="What Todo"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
