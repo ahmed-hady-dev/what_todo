@@ -11,13 +11,16 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.4
-  flutter_bloc: ^8.0.0
+  flutter_bloc: ^8.0.1
   dio: ^4.0.4
   easy_localization: ^3.0.0
   fluttertoast: ^8.0.8
-  nil: ^1.1.1
   sqflite:
   path:
+  audioplayers: ^0.20.1
+  focused_menu: ^1.0.5
+  showcaseview: ^1.1.4
+  get_storage: ^2.0.3
 
 dev_dependencies:
   flutter_test:
@@ -50,6 +53,7 @@ flutter:
   assets:
     - assets/images/
     - assets/translation/
+    - assets/music/task_done.mp3
 
   fonts:
     - family: NunitoSans

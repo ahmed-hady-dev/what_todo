@@ -1,1 +1,25 @@
-{}
+{
+  "hello": "مرحبا",
+  "description": "أدخل الوصف ...",
+  "title_empty": "يجب ألا يكون العنوان فارغًا.",
+  "title": "أدخل العنوان ...",
+  "dark_theme": "الوضع الليلي",
+  "lang": "اللغة",
+  "todo_empty": "يجب ألا تكون المهام فارغة",
+  "todo": "أدخل عنصر ...",
+  "no_tasks": "لا توجد مهام هنا. أضف البعض الآن...",
+  "name": "الإسم :",
+  "enter_name": "أدخل اسمك هنا",
+  "sound": "تشغيل الأصوات",
+  "delete_task": "مسح المهمة",
+  "showcase_home_fab": "إضغط هنا لإدخال مهمة جديدة.",
+  "showcase_task_fab": "إضغط هنا لمسح المهمة.",
+  "showcase_logo": "إضغط هنا لتفتح الإعداداتز.",
+  "showcase_task_card": "إضغط ضغطه طويله لمسح المهمة.",
+  "showcase_name": "إضغط هنا لتدخل إسمك.",
+  "showcase_title": "أضف عنوان المهمة هنا",
+  "showcase_description": "أضف تفاصيل المهمة هنا",
+  "showcase_todo_check": "انقر فوق العنصر لوضع علامة صح",
+  "showcase_todo_delete": "اضغط فوق الرمز x لحذف العنصر",
+  "showcase_todo_add": "أضف عنصر هنا"
+}

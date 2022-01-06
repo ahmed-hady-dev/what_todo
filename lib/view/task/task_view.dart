@@ -1,8 +1,10 @@
+// ignore_for_file: implementation_imports
+
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../constants/app_colors.dart';
-import '../../core/db_helper/database_helper.dart';
 import '../home/controller/home_cubit.dart';
 import '../home/widgets/gradient_fab.dart';
 import 'component/description_text_field.dart';
@@ -14,7 +16,7 @@ import 'model/task_model.dart';
 import 'model/todo_model.dart';
 
 class TaskView extends StatefulWidget {
-  const TaskView({Key? key, required this.task}) : super(key: key);
+  const TaskView({Key? key, this.task}) : super(key: key);
   final Task? task;
 
   @override
@@ -22,6 +24,7 @@ class TaskView extends StatefulWidget {
 }
 
 class _TaskViewState extends State<TaskView> {
+  BuildContext? myContext;
   int _taskId = 0;
   String _taskTitle = "";
   String _taskDescription = "";
@@ -29,51 +32,85 @@ class _TaskViewState extends State<TaskView> {
   late FocusNode _titleFocus;
   late FocusNode _descriptionFocus;
   late FocusNode _todoFocus;
-  late TextEditingController titleController;
-  late TextEditingController descriptionController;
-  late TextEditingController todoController;
+  late TextEditingController _titleController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _todoController;
 
   @override
   void initState() {
     if (widget.task != null) {
       _contentVisible = true;
       _taskTitle = widget.task!.title!;
-      _taskDescription = widget.task!.description ?? '(no description)';
+      _taskDescription = widget.task!.description ?? '';
       _taskId = widget.task!.id!;
     }
     _titleFocus = FocusNode();
     _descriptionFocus = FocusNode();
     _todoFocus = FocusNode();
-    titleController = TextEditingController();
-    descriptionController = TextEditingController();
-    todoController = TextEditingController();
+    _titleController = TextEditingController();
+    _descriptionController = TextEditingController();
+    _todoController = TextEditingController();
+    // WidgetsBinding.instance!.addPostFrameCallback(
+    //     (_) => Future.delayed(const Duration(milliseconds: 500), () {
+    //           ShowCaseWidget.of(myContext!)!.startShowCase([
+    //             // Constant.titleKey,
+    //             // Constant.descriptionKey,
+    //             // Constant.todoCheckKey,
+    //             // Constant.todoDeleteKey,
+    //             // Constant.todoAddKey,
+    //             // Constant.taskFabKey,
+    //           ]);
+    //         }));
+    // WidgetsBinding.instance!.addPostFrameCallback(
+    //   (_) => ShowCaseWidget.of(myContext!)!.startShowCase(
+    //     [
+    //       Constant.titleKey,
+    //       Constant.descriptionKey,
+    //       // Constant.todoCheckKey,
+    //       Constant.todoDeleteKey,
+    //       Constant.todoAddKey,
+    //       Constant.taskFabKey,
+    //     ],
+    //   ),
+    // );
+    // if (Constant.isFirst) {
+    //   WidgetsBinding.instance!.addPostFrameCallback(
+    //     (_) => ShowCaseWidget.of(myContext!)!.startShowCase(
+    //       [Constant.taskFabKey],
+    //     ),
+    //   );
+    // }
     super.initState();
   }
-
-  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   @override
   void dispose() {
     _titleFocus.dispose();
     _descriptionFocus.dispose();
     _todoFocus.dispose();
-    todoController.dispose();
-    titleController.dispose();
-    descriptionController.dispose();
+    _todoController.dispose();
+    _titleController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final cubit = HomeCubit.get(context);
     return SafeArea(
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
-          final cubit = HomeCubit.get(context);
+          myContext = context;
           return Scaffold(
+            resizeToAvoidBottomInset:
+                MediaQuery.of(context).orientation == Orientation.portrait
+                    ? true
+                    : false,
             body: Stack(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 24.0),
@@ -81,32 +118,26 @@ class _TaskViewState extends State<TaskView> {
                         children: [
                           const BackButtonWidget(),
                           TitleTextField(
-                            controller: titleController,
+                            controller: _titleController,
                             taskTitle: _taskTitle,
                             focusNode: _titleFocus,
                             onSubmitted: (value) async {
                               if (value.isNotEmpty || value != '') {
                                 if (widget.task == null) {
-                                  Task _newTask = Task(
-                                      title: value,
-                                      description: '(no description)');
+                                  Task _newTask = Task(title: value);
                                   _taskId =
                                       (await cubit.insertTask(task: _newTask))!;
-                                  setState(() {
-                                    _contentVisible = true;
-                                    _taskTitle = value.toString();
-                                  });
+                                  _contentVisible = true;
+                                  _taskTitle = value.toString();
                                 } else {
+                                  _taskTitle = value.toString();
                                   await cubit.updateTaskTitle(
                                       id: widget.task!.id!,
                                       title: value.toString());
-                                  debugPrint("Task Updated");
                                 }
                                 _descriptionFocus.requestFocus();
                               } else {
-                                debugPrint('The title must not be empty');
-                                Fluttertoast.showToast(
-                                    msg: 'The title must not be empty');
+                                Fluttertoast.showToast(msg: 'title_empty'.tr());
                               }
                             },
                           )
@@ -115,38 +146,35 @@ class _TaskViewState extends State<TaskView> {
                     ),
                     DescriptionTextField(
                       visible: _contentVisible,
-                      controller: descriptionController,
+                      controller: _descriptionController,
                       taskDescription: _taskDescription,
                       focusNode: _descriptionFocus,
                       onSubmitted: (value) async {
-                        if (value != "") {
-                          if (_taskId == 0) return;
-                          await cubit.updateTaskDescription(
-                              id: _taskId, description: value.toString());
-                          _taskDescription = value.toString();
-                        }
+                        if (_taskId == 0) return;
+                        await cubit.updateTaskDescription(
+                            id: _taskId, description: value.toString());
+                        _taskDescription = value.toString();
                         _todoFocus.requestFocus();
                       },
                     ),
                     Visibility(
                       visible: _contentVisible,
                       child: FutureBuilder(
-                        future: _dbHelper.getTodo(taskId: _taskId),
+                        future: cubit.dbHelper.getTodo(taskId: _taskId),
                         initialData: const <Todo>[],
                         builder:
                             (context, AsyncSnapshot<List<Todo>?> snapshot) {
-                          final todoList = snapshot.data ?? [];
                           return Expanded(
                             child: ListView.builder(
+                              physics: const BouncingScrollPhysics(),
                               itemCount: snapshot.data!.length,
                               itemBuilder: (context, index) {
                                 return TodoWidget(
-                                  todo: todoList[index],
-                                  text: todoList[index].title,
-                                  isDone: todoList[index].isDone == 0
-                                      ? false
-                                      : true,
-                                );
+                                    todo: snapshot.data![index],
+                                    text: snapshot.data![index].title,
+                                    isDone: snapshot.data![index].isDone == 0
+                                        ? false
+                                        : true);
                               },
                             ),
                           );
@@ -156,20 +184,20 @@ class _TaskViewState extends State<TaskView> {
                     TodoRow(
                         contentVisible: _contentVisible,
                         todoFocus: _todoFocus,
-                        todoController: todoController,
+                        todoController: _todoController,
                         taskId: _taskId),
                   ],
                 ),
                 GradientFAB(
+                  isHome: false,
                   visible: _contentVisible,
                   icon: Icons.delete_forever_rounded,
                   primaryColor: AppColors.pinkColor,
                   secondaryColor: const Color(0xFFF54770),
                   onPressed: () async {
-                    if (_taskId != 0) {
-                      await cubit.deleteTask(id: _taskId);
-                      Navigator.pop(context);
-                    }
+                    if (_taskId == 0) return;
+                    await cubit.deleteTask(id: _taskId);
+                    Navigator.pop(context);
                   },
                 ),
               ],

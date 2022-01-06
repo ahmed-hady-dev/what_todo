@@ -1,0 +1,3 @@
+class Haha {
+  Haha.ma();
+}

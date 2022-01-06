@@ -1,3 +1,6 @@
+// ignore_for_file: implementation_imports
+
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 
 class TodoTextFiled extends StatelessWidget {
@@ -15,7 +18,7 @@ class TodoTextFiled extends StatelessWidget {
         focusNode: focusNode,
         controller: controller!..text = "",
         onSubmitted: onSubmitted,
-        decoration: const InputDecoration(hintText: "Enter Todo item..."),
+        decoration: InputDecoration(hintText: "todo".tr()),
       ),
     );
   }

@@ -5,7 +5,7 @@ import '../../view/task/model/todo_model.dart';
 
 class DatabaseHelper {
   Future<Database> database() async {
-    return openDatabase(
+    final db = openDatabase(
       join(await getDatabasesPath(), 'todo.db'),
       onCreate: (db, version) async {
         await db.execute(
@@ -15,6 +15,7 @@ class DatabaseHelper {
       },
       version: 1,
     );
+    return db;
   }
 
   Future<int?> insertTask({required Task task}) async {
@@ -84,5 +85,10 @@ class DatabaseHelper {
   Future<void> updateTodoDone({required int id, required int isDone}) async {
     Database _db = await database();
     await _db.rawUpdate("UPDATE todo SET isDone = '$isDone' WHERE id = '$id'");
+  }
+
+  Future<void> deleteTodo({required int todoId}) async {
+    Database _db = await database();
+    await _db.rawDelete("DELETE FROM todo WHERE id = '$todoId' ");
   }
 }

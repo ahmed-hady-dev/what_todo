@@ -9,17 +9,14 @@ ThemeData lightTheme(BuildContext context) {
     colorScheme: Theme.of(context).colorScheme.copyWith(primary: Colors.black),
     textTheme: ThemeData.light()
         .textTheme
-        .apply(
-          fontFamily: 'NunitoSans',
-        )
+        .apply(fontFamily: 'NunitoSans')
         .copyWith(
             headline5: Theme.of(context)
                 .textTheme
                 .headline5!
                 .copyWith(color: AppColors.darkBlueColor)),
-    primaryTextTheme: ThemeData.light().textTheme.apply(
-          fontFamily: 'NunitoSans',
-        ),
+    primaryTextTheme:
+        ThemeData.light().textTheme.apply(fontFamily: 'NunitoSans'),
     inputDecorationTheme: const InputDecorationTheme(
       focusColor: Colors.black,
       border: InputBorder.none,
@@ -44,6 +41,8 @@ ThemeData lightTheme(BuildContext context) {
 //===============================================================
 ThemeData darkTheme(BuildContext context) {
   return ThemeData.dark().copyWith(
+    brightness: Brightness.dark,
+    dividerColor: Colors.white,
     scaffoldBackgroundColor: AppColors.darkScaffoldColor,
     colorScheme: Theme.of(context).colorScheme.copyWith(primary: Colors.grey),
     textTheme: ThemeData.dark()
@@ -69,8 +68,6 @@ ThemeData darkTheme(BuildContext context) {
       errorBorder: InputBorder.none,
       enabledBorder: InputBorder.none,
     ),
-    brightness: Brightness.dark,
-    dividerColor: Colors.white,
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         primary: Colors.white,

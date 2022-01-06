@@ -1,3 +1,6 @@
+// ignore_for_file: implementation_imports
+
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../../home/controller/home_cubit.dart';
@@ -33,6 +36,8 @@ class TodoRow extends StatelessWidget {
         child: Row(
           children: [
             const CheckIcon(),
+            // description: 'showcase_todo_delete'.tr(),
+            // widgetKey: Constant.todoAddKey,
             TodoTextFiled(
               focusNode: _todoFocus,
               controller: todoController,
@@ -43,8 +48,9 @@ class TodoRow extends StatelessWidget {
                       Todo(title: value, isDone: 0, taskId: _taskId);
                   await cubit.insertTodo(todo: _newTodo);
                   _todoFocus.requestFocus();
+                  todoController.clear();
                 } else {
-                  Fluttertoast.showToast(msg: 'the todo must not be empty');
+                  Fluttertoast.showToast(msg: 'todo_empty'.tr());
                 }
               },
             )

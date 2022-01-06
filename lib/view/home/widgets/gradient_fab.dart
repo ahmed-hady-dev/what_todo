@@ -1,8 +1,9 @@
+// ignore_for_file: implementation_imports
+
+import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 
 class GradientFAB extends StatelessWidget {
-  final Function() onPressed;
-
   const GradientFAB({
     required this.onPressed,
     Key? key,
@@ -12,23 +13,27 @@ class GradientFAB extends StatelessWidget {
     this.icon = Icons.add_rounded,
     this.iconSize = 36.0,
     this.visible = true,
+    this.isHome = true,
   }) : super(key: key);
+  final Function() onPressed;
   final Color? primaryColor;
   final Color? secondaryColor;
   final double borderRadius;
   final IconData? icon;
   final double? iconSize;
   final bool? visible;
+  final bool? isHome;
 
   @override
   Widget build(BuildContext context) {
     return Visibility(
       visible: visible!,
       child: Positioned(
-        bottom: 0.0,
-        right: 0.0,
+        bottom: 12.0,
+        right: context.locale.languageCode == 'en' ? 8.0 : null,
+        left: context.locale.languageCode == 'en' ? null : 8.0,
         child: Padding(
-          padding: const EdgeInsets.all(18.0),
+          padding: const EdgeInsets.all(12.0),
           child: DecoratedBox(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(borderRadius),
@@ -39,10 +44,7 @@ class GradientFAB extends StatelessWidget {
               onPressed: onPressed,
               iconSize: iconSize!,
               alignment: Alignment.center,
-              icon: Icon(
-                icon!,
-                color: Colors.white,
-              ),
+              icon: Icon(icon!, color: Colors.white),
             ),
           ),
         ),

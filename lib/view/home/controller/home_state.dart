@@ -64,3 +64,12 @@ class UpdateTodoLoadingState extends HomeState {}
 class UpdateTodoSuccessState extends HomeState {}
 
 class UpdateTodoFailedState extends HomeState {}
+//===============================================================
+
+class DeleteTodoLoadingState extends HomeState {}
+
+class DeleteTodoSuccessState extends HomeState {}
+
+class DeleteTodoFailedState extends HomeState {}
+
+class SoundChangeState extends HomeState {}

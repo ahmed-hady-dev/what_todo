@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:what_todo/constants/constants.dart';
 import 'view/home/controller/home_cubit.dart';
 import 'view/home/home_view.dart';
 
@@ -19,14 +20,19 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   //===============================================================
   await CacheHelper.init();
-  await CacheHelper.get(key: 'isDark') ??
-      await CacheHelper.saveData(key: 'isDark', value: false);
-  bool? isDark = CacheHelper.get(key: 'isDark');
+  await CacheHelper.getTheme ?? await CacheHelper.cacheTheme(value: false);
+  await CacheHelper.getSound ?? await CacheHelper.cacheSound(value: true);
+  await CacheHelper.getShowCase ?? await CacheHelper.cacheShowCase(value: true);
+  bool? isDark = await CacheHelper.getTheme;
+  bool? isSoundOn = await CacheHelper.getSound;
+  bool? isFirstTime = await CacheHelper.getShowCase;
+  Constant.isFirst = isFirstTime!;
+  HomeCubit().showCase(isFirstTime: isFirstTime);
   //===============================================================
   BlocOverrides.runZoned(
     () {
       runApp(EasyLocalization(
-        child: MyApp(isDark: isDark!),
+        child: MyApp(isDark: isDark!, isSoundOn: isSoundOn!),
         path: 'assets/translation',
         supportedLocales: const [Locale('en', 'US'), Locale('ar', 'EG')],
         fallbackLocale: const Locale('en', 'US'),
@@ -37,8 +43,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, this.isDark}) : super(key: key);
+  const MyApp({Key? key, this.isDark, this.isSoundOn}) : super(key: key);
   final bool? isDark;
+  final bool? isSoundOn;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +56,8 @@ class MyApp extends StatelessWidget {
               ThemeCubit()..changeTheme(themeModeFromCache: isDark),
         ),
         BlocProvider(
-          create: (context) => HomeCubit(),
+          create: (context) =>
+              HomeCubit()..changeSound(soundFromCache: isSoundOn),
         )
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
@@ -66,7 +74,9 @@ class MyApp extends StatelessWidget {
             locale: context.locale,
             supportedLocales: context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
-            home: const HomeView(),
+            home: const Scaffold(
+              body: HomeView(),
+            ),
           );
         },
       ),

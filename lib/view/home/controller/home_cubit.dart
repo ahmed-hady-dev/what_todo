@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:what_todo/core/cacheHelper/cache_helper.dart';
 import '../../../core/db_helper/database_helper.dart';
 import '../../task/model/task_model.dart';
 import '../../task/model/todo_model.dart';
@@ -12,12 +13,63 @@ class HomeCubit extends Cubit<HomeState> {
   static HomeCubit get(context) => BlocProvider.of(context);
 
 //===============================================================
-  final DatabaseHelper _dbHelper = DatabaseHelper();
+  final DatabaseHelper dbHelper = DatabaseHelper();
+  final TextEditingController nameController = TextEditingController();
+  bool isSoundOn = true;
+  late bool isFirst;
+  GlobalKey key1 = GlobalKey();
+  GlobalKey key2 = GlobalKey();
+  GlobalKey key3 = GlobalKey();
+  GlobalKey key4 = GlobalKey();
+  GlobalKey key5 = GlobalKey();
 
 //===============================================================
   @override
   Future<void> close() async {
+    nameController.dispose();
     return super.close();
+  }
+
+  //===============================================================
+  void showCase({required bool? isFirstTime}) async {
+    if (isFirstTime!) {
+      await dbHelper.insertTask(
+          task: Task(
+              title: 'My wonderful day 🙌',
+              description: 'To-do list to get the best out of the day ✨'));
+      await dbHelper.insertTodo(
+          todo: Todo(
+        taskId: 1,
+        title: 'Wake up at 7 am 🛏️.',
+        isDone: 0,
+      ));
+      await dbHelper.insertTodo(
+          todo: Todo(
+        taskId: 1,
+        title: 'Go to the Gym at 10 am 🏋️.',
+        isDone: 0,
+      ));
+      await dbHelper.insertTodo(
+          todo: Todo(
+        taskId: 1,
+        title: 'Finish the homework 📖.',
+        isDone: 0,
+      ));
+      await CacheHelper.cacheShowCase(value: false);
+    }
+  }
+
+  //===============================================================
+
+  void changeSound({bool? soundFromCache}) async {
+    if (soundFromCache != null) {
+      isSoundOn = soundFromCache;
+      emit(SoundChangeState());
+    } else {
+      isSoundOn = !isSoundOn;
+      await CacheHelper.cacheSound(value: isSoundOn);
+      emit(SoundChangeState());
+    }
   }
 
 //===============================================================
@@ -26,7 +78,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<int?> insertTask({required Task task}) async {
     emit(InsertTaskLoadingState());
     try {
-      int? taskInsertedId = await _dbHelper.insertTask(task: task);
+      int? taskInsertedId = await dbHelper.insertTask(task: task);
       emit(InsertTaskSuccessState());
       return taskInsertedId;
     } catch (e) {
@@ -40,7 +92,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(GetTasksLoadingState());
     try {
       emit(GetTasksSuccessState());
-      return await _dbHelper.getTasks();
+      return await dbHelper.getTasks();
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
@@ -52,7 +104,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> updateTaskTitle({required int id, required String title}) async {
     emit(UpdateTaskTitleLoadingState());
     try {
-      await _dbHelper.updateTaskTitle(id: id, title: title);
+      await dbHelper.updateTaskTitle(id: id, title: title);
       emit(UpdateTaskTitleSuccessState());
     } catch (e, s) {
       debugPrint(e.toString());
@@ -66,7 +118,7 @@ class HomeCubit extends Cubit<HomeState> {
       {required int id, required String description}) async {
     emit(UpdateTaskDescriptionLoadingState());
     try {
-      _dbHelper.updateTaskDescription(id: id, description: description);
+      dbHelper.updateTaskDescription(id: id, description: description);
       emit(UpdateTaskDescriptionSuccessState());
     } catch (e, s) {
       debugPrint(e.toString());
@@ -79,7 +131,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> deleteTask({required int id}) async {
     emit(DeleteTaskLoadingState());
     try {
-      _dbHelper.deleteTask(id: id);
+      dbHelper.deleteTask(id: id);
       emit(DeleteTaskSuccessState());
     } catch (e, s) {
       debugPrint(e.toString());
@@ -94,7 +146,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> insertTodo({required Todo todo}) async {
     emit(InsertTodoLoadingState());
     try {
-      _dbHelper.insertTodo(todo: todo);
+      dbHelper.insertTodo(todo: todo);
       emit(InsertTodoSuccessState());
     } catch (e, s) {
       debugPrint(e.toString());
@@ -108,7 +160,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(GetTodoLoadingState());
     try {
       emit(GetTodoSuccessState());
-      return await _dbHelper.getTodo(taskId: taskId);
+      return await dbHelper.getTodo(taskId: taskId);
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
@@ -120,7 +172,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> updateTodoDone({required int id, required int isDone}) async {
     emit(UpdateTodoLoadingState());
     try {
-      _dbHelper.updateTodoDone(id: id, isDone: isDone);
+      dbHelper.updateTodoDone(id: id, isDone: isDone);
       emit(UpdateTodoSuccessState());
     } catch (e, s) {
       debugPrint(e.toString());
@@ -128,6 +180,17 @@ class HomeCubit extends Cubit<HomeState> {
       emit(UpdateTodoFailedState());
     }
   }
-//===============================================================
 
+//===============================================================
+  Future<void> deleteTodo({required int todoId}) async {
+    emit(DeleteTodoLoadingState());
+    try {
+      dbHelper.deleteTodo(todoId: todoId);
+      emit(DeleteTodoSuccessState());
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrint(s.toString());
+      emit(DeleteTodoFailedState());
+    }
+  }
 }
