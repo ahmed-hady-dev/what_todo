@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:what_todo/core/cacheHelper/cache_helper.dart';
+import '../../../core/cacheHelper/cache_helper.dart';
 import '../../../core/db_helper/database_helper.dart';
 import '../../task/model/task_model.dart';
 import '../../task/model/todo_model.dart';
@@ -64,7 +64,7 @@ class HomeCubit extends Cubit<HomeState> {
   void changeSound({bool? soundFromCache}) async {
     if (soundFromCache != null) {
       isSoundOn = soundFromCache;
-      emit(SoundChangeState());
+      // emit(SoundChangeState());
     } else {
       isSoundOn = !isSoundOn;
       await CacheHelper.cacheSound(value: isSoundOn);

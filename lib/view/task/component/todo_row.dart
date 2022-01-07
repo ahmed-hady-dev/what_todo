@@ -7,7 +7,7 @@ import '../../home/controller/home_cubit.dart';
 import '../model/todo_model.dart';
 import '../widgets/todo_text_filed.dart';
 
-import 'check_icon.dart';
+import '../widgets/check_icon.dart';
 
 class TodoRow extends StatelessWidget {
   const TodoRow({
@@ -36,8 +36,6 @@ class TodoRow extends StatelessWidget {
         child: Row(
           children: [
             const CheckIcon(),
-            // description: 'showcase_todo_delete'.tr(),
-            // widgetKey: Constant.todoAddKey,
             TodoTextFiled(
               focusNode: _todoFocus,
               controller: todoController,

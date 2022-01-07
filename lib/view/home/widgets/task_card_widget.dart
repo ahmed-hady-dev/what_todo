@@ -4,8 +4,11 @@ import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:showcaseview/showcaseview.dart';
+import 'package:what_todo/constants/constants.dart';
+import 'package:what_todo/core/cacheHelper/cache_helper.dart';
 import 'package:what_todo/view/home/controller/home_cubit.dart';
-import '../../../core/theme/theme_cubit.dart';
+import 'package:what_todo/view/home/widgets/task_card_widget_container.dart';
 
 class TaskCardWidget extends StatelessWidget {
   const TaskCardWidget(
@@ -22,12 +25,11 @@ class TaskCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = Theme.of(context).textTheme;
-    final bool isDark = ThemeCubit.get(context).isDark;
-    final double width = MediaQuery.of(context).size.width;
-    final bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
     final bool isSubtitle = subTitle != null;
+    final textStyle =
+        Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white);
+    final isFirstTaskCard = CacheHelper.read(key: 'isFirstTimeTaskCard');
+    final isFirst = CacheHelper.read(key: 'isFirstTime');
     return FocusedMenuHolder(
       blurSize: 8.0,
       menuOffset: 8.0,
@@ -51,33 +53,18 @@ class TaskCardWidget extends StatelessWidget {
                 const Icon(Icons.delete_forever_rounded, color: Colors.white)),
       ],
       onPressed: onTap,
-      child: Container(
-        width: width,
-        padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 16.0),
-        decoration: BoxDecoration(
-            color: isDark ? Colors.white24 : Colors.white,
-            borderRadius: BorderRadius.circular(22.0)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(title,
-                maxLines: isLandscape ? 2 : null,
-                overflow: isLandscape ? TextOverflow.ellipsis : null,
-                style:
-                    textTheme.headline5!.copyWith(fontWeight: FontWeight.bold)),
-            if (isSubtitle)
-              Container(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  subTitle ?? '',
-                  style: textTheme.bodyText1,
-                  overflow: isLandscape ? TextOverflow.ellipsis : null,
-                ),
-              )
-          ],
-        ),
-      ),
+      child: isFirstTaskCard && isFirst
+          ? Showcase(
+              key: Constant.taskKey,
+              descTextStyle: textStyle,
+              radius: BorderRadius.circular(22.0),
+              description: 'showcase_task_card'.tr(),
+              showcaseBackgroundColor: const Color(0xFF7349FE),
+              child: TaskCardWidgetContainer(
+                  title: title, isSubtitle: isSubtitle, subTitle: subTitle),
+            )
+          : TaskCardWidgetContainer(
+              title: title, isSubtitle: isSubtitle, subTitle: subTitle),
     );
   }
 }

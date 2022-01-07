@@ -2,22 +2,25 @@
 
 import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
+import 'package:showcaseview/showcaseview.dart';
+import 'package:what_todo/constants/constants.dart';
 import 'package:what_todo/core/cacheHelper/cache_helper.dart';
 import 'package:what_todo/core/responsive_helper/responsive_layout.dart';
 import 'package:what_todo/core/theme/theme_cubit.dart';
 import 'package:what_todo/view/home/controller/home_cubit.dart';
 import 'package:what_todo/view/home/widgets/settings_model_sheet.dart';
+import 'package:what_todo/widgets/on_finished_dialog.dart';
 
-class LogoImage extends StatefulWidget {
-  const LogoImage({
+class LogoWidget extends StatefulWidget {
+  const LogoWidget({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<LogoImage> createState() => _LogoImageState();
+  State<LogoWidget> createState() => _LogoWidgetState();
 }
 
-class _LogoImageState extends State<LogoImage>
+class _LogoWidgetState extends State<LogoWidget>
     with SingleTickerProviderStateMixin {
   final _defaultDuration = const Duration(
     seconds: 2,
@@ -42,45 +45,31 @@ class _LogoImageState extends State<LogoImage>
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance!.addPostFrameCallback(
-    //   (_) => ShowCaseWidget.of(context)!.startShowCase(
-    //     [
-    //       Constant.logoKey,
-    //       Constant.nameKey,
-    //       Constant.taskKey,
-    //       Constant.homeFabKey,
-    //     ],
-    //   ),
-    // );
 
-    // print('Constant.logoKey  ' + Constant.logoKey.currentWidget.toString());
-    // print('Constant.descriptionKey  ' +
-    //     Constant.descriptionKey.currentWidget.toString());
-    // print(
-    //     'Constant.homeFabKey  ' + Constant.homeFabKey.currentWidget.toString());
-    // print('Constant.nameKey  ' + Constant.nameKey.currentWidget.toString());
-    // print(
-    //     'Constant.taskFabKey  ' + Constant.taskFabKey.currentWidget.toString());
-    // print('Constant.taskKey  ' + Constant.taskKey.currentWidget.toString());
-    // print('Constant.titleKey  ' + Constant.titleKey.currentWidget.toString());
-    // print(
-    //     'Constant.todoAddKey  ' + Constant.todoAddKey.currentWidget.toString());
-    // print('Constant.todoCheckKey  ' +
-    //     Constant.todoCheckKey.currentWidget.toString());
-    // print('Constant.todoDeleteKey  ' +
-    //     Constant.todoDeleteKey.currentWidget.toString());
-    // if (Constant.isFirst) {
-    //   WidgetsBinding.instance!.addPostFrameCallback(
-    //     (_) => ShowCaseWidget.of(context)!.startShowCase(
-    //       [
-    //         Constant.logoKey,
-    //         Constant.nameKey,
-    //         Constant.taskKey,
-    //         Constant.homeFabKey,
-    //       ],
-    //     ),
-    //   );
-    // }
+    CacheHelper.write(key: 'isFirstTimeTaskCard', value: true);
+    if (CacheHelper.read(key: 'isFirstTime')) {
+      WidgetsBinding.instance!.addPostFrameCallback(
+        (_) => showDialog(
+          context: context,
+          builder: (context) => const NameDialog(),
+        ).then((value) {
+          final portraitList = <GlobalKey<State<StatefulWidget>>>[
+            Constant.logoKey,
+            Constant.nameKey,
+            Constant.taskKey,
+          ];
+          final landscapeList = <GlobalKey<State<StatefulWidget>>>[
+            Constant.logoKey,
+            Constant.taskKey,
+          ];
+          ShowCaseWidget.of(context)!.startShowCase(
+              MediaQuery.of(context).orientation == Orientation.landscape
+                  ? landscapeList
+                  : portraitList);
+        }).then((value) =>
+            CacheHelper.write(key: 'isFirstTimeTaskCard', value: false)),
+      );
+    }
   }
 
   @override
@@ -88,6 +77,12 @@ class _LogoImageState extends State<LogoImage>
     bool isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     var userName = CacheHelper.getUserName ?? '';
+    final double height = MediaQuery.of(context).size.height;
+    final double width = MediaQuery.of(context).size.width;
+    final textStyle =
+        Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white);
+    final isEn = context.locale.languageCode == 'en';
+    final space = isEn ? ' ' : '';
     final widgetList = <Widget>[
       InkWell(
         onTap: showSettingsModalBottomSheet,
@@ -98,13 +93,20 @@ class _LogoImageState extends State<LogoImage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 22.0),
-                SlideTransition(
-                  position: _animation,
-                  transformHitTests: false,
-                  child: Image.asset('assets/images/three_dots.png',
-                      width: isLandscape
-                          ? MediaQuery.of(context).size.height * 0.25
-                          : MediaQuery.of(context).size.width * 0.2),
+                Showcase(
+                  key: Constant.logoKey,
+                  description: 'showcase_logo'.tr(),
+                  radius: BorderRadius.circular(18.0),
+                  showcaseBackgroundColor: const Color(0xFF7349FE),
+                  descTextStyle: textStyle,
+                  overlayPadding: EdgeInsets.only(
+                      bottom: isLandscape ? width * 0.04 : height * 0.04),
+                  child: SlideTransition(
+                    position: _animation,
+                    transformHitTests: false,
+                    child: Image.asset('assets/images/three_dots.png',
+                        width: isLandscape ? height * 0.25 : width * 0.2),
+                  ),
                 ),
                 AnimatedBuilder(
                   animation: _breathingAnimation,
@@ -141,42 +143,35 @@ class _LogoImageState extends State<LogoImage>
           : Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('hello'.tr(),
-                        style: Theme.of(context).textTheme.headline5),
-                    Expanded(
-                      child: SizedBox(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              bottom: context.locale.languageCode == 'en'
-                                  ? 0.0
-                                  : 5.0),
-                          child: TextField(
-                            textAlign: TextAlign.start,
-                            controller: HomeCubit.get(context).nameController
-                              ..text = userName,
-                            style: Theme.of(context).textTheme.headline5,
-                            decoration: InputDecoration(
-                                hintText: 'enter_name'.tr(),
-                                hintStyle: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .color!
-                                            .withOpacity(0.6))),
-                            onSubmitted: (value) {
-                              CacheHelper.cacheUserInfo(userName: value);
-                            },
+                child: Showcase(
+                  key: Constant.nameKey,
+                  description: 'showcase_name'.tr(),
+                  radius: BorderRadius.circular(8.0),
+                  showcaseBackgroundColor: const Color(0xFF7349FE),
+                  descTextStyle: textStyle,
+                  overlayPadding: EdgeInsets.only(left: height * 0.01),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('hello'.tr() + space,
+                          style: Theme.of(context).textTheme.headline5),
+                      Expanded(
+                        child: SizedBox(
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: isEn ? 0.0 : 5.0),
+                            child: TextField(
+                              textAlign: TextAlign.start,
+                              controller: HomeCubit.get(context).nameController
+                                ..text = userName,
+                              style: Theme.of(context).textTheme.headline5,
+                              onSubmitted: (value) =>
+                                  CacheHelper.cacheUserInfo(userName: value),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             )
@@ -193,14 +188,12 @@ class _LogoImageState extends State<LogoImage>
     );
   }
 
-  Future<dynamic> showSettingsModalBottomSheet() {
+  Future showSettingsModalBottomSheet() {
     return showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(22))),
-      builder: (context) {
-        return const SettingModalSheet();
-      },
+      builder: (context) => const SettingModalSheet(),
     );
   }
 }

@@ -20,7 +20,7 @@ class SoundRow extends StatelessWidget {
             children: <Widget>[
               Text("sound".tr(), style: Theme.of(context).textTheme.headline6),
               CupertinoSwitch(
-                activeColor: Colors.black26,
+                activeColor: Colors.black38,
                 thumbColor: Colors.black,
                 value: HomeCubit.get(context).isSoundOn,
                 onChanged: (value) {

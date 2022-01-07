@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:what_todo/view/home/component/language_row.dart';
-import 'package:what_todo/view/home/component/sound_row.dart';
-import 'package:what_todo/view/home/component/theme_row.dart';
+import '../component/language_row.dart';
+import '../component/sound_row.dart';
+import '../component/theme_row.dart';
 
 class SettingModalSheet extends StatelessWidget {
   const SettingModalSheet({

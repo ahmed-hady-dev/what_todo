@@ -9,17 +9,12 @@
   "todo": "Enter To-do item...",
   "no_tasks": "No tasks yet. add Some to start...",
   "name": "Name :",
-  "enter_name": "Edit Your name here",
+  "enter_name": "Enter your name here",
   "sound": "Play sounds",
   "delete_task": "Delete task",
-  "showcase_home_fab": "Click here to add new Task.",
-  "showcase_task_fab": "Click here to delete Task.",
   "showcase_logo": "Click here to open settings.",
-  "showcase_task_card": "Long press on Task to delete it.",
+  "showcase_task_card": "Click on the task to view and add To-do, Long press on Task to delete it",
   "showcase_name": "Click here to edit your name.",
-  "showcase_title": "Add task title here",
-  "showcase_description": "Add task description here",
-  "showcase_todo_check": "Click To-do to mark it as done",
-  "showcase_todo_delete": "Click on the x icon to delete To-do",
-  "showcase_todo_add": "Add To-do here"
+  "done": "Done",
+  "not_now": "Not now"
 }

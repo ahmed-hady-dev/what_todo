@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:what_todo/core/router/router.dart';
-import 'package:what_todo/view/home/widgets/task_card_widget.dart';
-import 'package:what_todo/view/task/model/task_model.dart';
-import 'package:what_todo/view/task/task_view.dart';
+import '../../../core/router/router.dart';
+import '../widgets/task_card_widget.dart';
+import '../../task/model/task_model.dart';
+import '../../task/task_view.dart';
 
 class LayoutTaskCard extends StatelessWidget {
   const LayoutTaskCard({

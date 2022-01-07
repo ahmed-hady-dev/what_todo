@@ -23,8 +23,6 @@ class TitleTextField extends StatelessWidget {
       child: ConstrainedBox(
         constraints:
             BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.2),
-        // description: 'showcase_title'.tr(),
-        // widgetKey: Constant.titleKey,
         child: TextField(
           controller: controller..text = taskTitle,
           keyboardType: TextInputType.text,

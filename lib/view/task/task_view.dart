@@ -50,36 +50,6 @@ class _TaskViewState extends State<TaskView> {
     _titleController = TextEditingController();
     _descriptionController = TextEditingController();
     _todoController = TextEditingController();
-    // WidgetsBinding.instance!.addPostFrameCallback(
-    //     (_) => Future.delayed(const Duration(milliseconds: 500), () {
-    //           ShowCaseWidget.of(myContext!)!.startShowCase([
-    //             // Constant.titleKey,
-    //             // Constant.descriptionKey,
-    //             // Constant.todoCheckKey,
-    //             // Constant.todoDeleteKey,
-    //             // Constant.todoAddKey,
-    //             // Constant.taskFabKey,
-    //           ]);
-    //         }));
-    // WidgetsBinding.instance!.addPostFrameCallback(
-    //   (_) => ShowCaseWidget.of(myContext!)!.startShowCase(
-    //     [
-    //       Constant.titleKey,
-    //       Constant.descriptionKey,
-    //       // Constant.todoCheckKey,
-    //       Constant.todoDeleteKey,
-    //       Constant.todoAddKey,
-    //       Constant.taskFabKey,
-    //     ],
-    //   ),
-    // );
-    // if (Constant.isFirst) {
-    //   WidgetsBinding.instance!.addPostFrameCallback(
-    //     (_) => ShowCaseWidget.of(myContext!)!.startShowCase(
-    //       [Constant.taskFabKey],
-    //     ),
-    //   );
-    // }
     super.initState();
   }
 

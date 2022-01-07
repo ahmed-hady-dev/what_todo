@@ -14,11 +14,14 @@ class TodoTextFiled extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: TextField(
-        focusNode: focusNode,
-        controller: controller!..text = "",
-        onSubmitted: onSubmitted,
-        decoration: InputDecoration(hintText: "todo".tr()),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12.0),
+        child: TextField(
+          focusNode: focusNode,
+          controller: controller!..text = "",
+          onSubmitted: onSubmitted,
+          decoration: InputDecoration(hintText: "todo".tr()),
+        ),
       ),
     );
   }

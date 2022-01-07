@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:what_todo/constants/constants.dart';
 import 'view/home/controller/home_cubit.dart';
 import 'view/home/home_view.dart';
 
@@ -26,7 +25,6 @@ void main() async {
   bool? isDark = await CacheHelper.getTheme;
   bool? isSoundOn = await CacheHelper.getSound;
   bool? isFirstTime = await CacheHelper.getShowCase;
-  Constant.isFirst = isFirstTime!;
   HomeCubit().showCase(isFirstTime: isFirstTime);
   //===============================================================
   BlocOverrides.runZoned(
@@ -52,10 +50,12 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          lazy: false,
           create: (context) =>
               ThemeCubit()..changeTheme(themeModeFromCache: isDark),
         ),
         BlocProvider(
+          lazy: false,
           create: (context) =>
               HomeCubit()..changeSound(soundFromCache: isSoundOn),
         )
@@ -74,9 +74,7 @@ class MyApp extends StatelessWidget {
             locale: context.locale,
             supportedLocales: context.supportedLocales,
             localizationsDelegates: context.localizationDelegates,
-            home: const Scaffold(
-              body: HomeView(),
-            ),
+            home: const HomeView(),
           );
         },
       ),

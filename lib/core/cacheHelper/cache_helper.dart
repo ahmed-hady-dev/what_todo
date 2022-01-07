@@ -60,12 +60,16 @@ class CacheHelper {
   }
 
 //===============================================================
-  static Future<void> saveData(
+  static Future<void> write(
       {required String key, required dynamic value}) async {
     return await _appBox.write(key, value);
   }
 
-  static dynamic get({required String key}) {
+  static dynamic read({required String key}) {
     return _appBox.read(key);
+  }
+
+  static bool hasData({required String key}) {
+    return _appBox.hasData(key);
   }
 }

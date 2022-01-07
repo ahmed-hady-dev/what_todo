@@ -19,7 +19,7 @@ class ThemeRow extends StatelessWidget {
         children: <Widget>[
           Text("dark_theme".tr(), style: Theme.of(context).textTheme.headline6),
           CupertinoSwitch(
-            activeColor: Colors.black26,
+            activeColor: Colors.black38,
             thumbColor: Colors.black,
             value: ThemeCubit.get(context).isDark,
             onChanged: (value) {

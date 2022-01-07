@@ -28,8 +28,6 @@ class DescriptionTextField extends StatelessWidget {
         visible: visible,
         child: Padding(
           padding: const EdgeInsetsDirectional.only(bottom: 12.0),
-          // description: 'showcase_description'.tr(),
-          // widgetKey: Constant.descriptionKey,
           child: TextField(
             controller: controller..text = taskDescription.toString(),
             focusNode: focusNode,

@@ -41,8 +41,6 @@ class TodoWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24.0),
         child: Row(
           children: <Widget>[
-            // description: 'showcase_todo_check'.tr(),
-            // widgetKey: Constant.todoCheckKey,
             Container(
               width: 32.0,
               height: 32.0,
@@ -73,8 +71,6 @@ class TodoWidget extends StatelessWidget {
                     iconSize: 18,
                     splashRadius: 20.0,
                     onPressed: () => cubit.deleteTodo(todoId: todo.id!),
-                    // description: 'showcase_todo_delete'.tr(),
-                    // widgetKey: Constant.todoDeleteKey,
                     icon: const Icon(Icons.clear),
                   ),
                 ],
