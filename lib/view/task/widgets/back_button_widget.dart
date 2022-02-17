@@ -6,7 +6,6 @@ class BackButtonWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return const Padding(padding: EdgeInsets.all(12.0), child: BackButton());
-  }
+  Widget build(BuildContext context) =>
+      const Padding(padding: EdgeInsets.all(12.0), child: BackButton());
 }

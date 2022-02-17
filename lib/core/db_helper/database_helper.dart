@@ -45,14 +45,15 @@ class DatabaseHelper {
 
   Future<void> updateTaskTitle({required int id, required String title}) async {
     Database _db = await database();
-    await _db.rawUpdate("UPDATE tasks SET title = '$title' WHERE id = '$id'");
+    await _db.rawUpdate(
+        "UPDATE tasks SET title = '${title.trim()}' WHERE id = '$id'");
   }
 
   Future<void> updateTaskDescription(
       {required int id, required String description}) async {
     Database _db = await database();
     await _db.rawUpdate(
-        "UPDATE tasks SET description = '$description' WHERE id = '$id'");
+        "UPDATE tasks SET description = '${description.trim()}' WHERE id = '$id'");
   }
 
   Future<void> deleteTask({required int id}) async {

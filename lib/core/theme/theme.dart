@@ -4,6 +4,11 @@ import '../../constants/app_colors.dart';
 
 ThemeData lightTheme(BuildContext context) {
   return ThemeData.light().copyWith(
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+      },
+    ),
     brightness: Brightness.light,
     dividerColor: Colors.black,
     scaffoldBackgroundColor: AppColors.lightScaffoldColor,
@@ -42,6 +47,11 @@ ThemeData lightTheme(BuildContext context) {
 //===============================================================
 ThemeData darkTheme(BuildContext context) {
   return ThemeData.dark().copyWith(
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: <TargetPlatform, PageTransitionsBuilder>{
+        TargetPlatform.android: ZoomPageTransitionsBuilder(),
+      },
+    ),
     brightness: Brightness.dark,
     dividerColor: Colors.white,
     scaffoldBackgroundColor: AppColors.darkScaffoldColor,

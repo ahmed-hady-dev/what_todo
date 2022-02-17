@@ -6,15 +6,12 @@ import 'view/home/home_view.dart';
 
 import 'core/blocObserver/bloc_observer.dart';
 import 'core/cacheHelper/cache_helper.dart';
-import 'core/dioHelper/dio_helper.dart';
 import 'core/router/router.dart';
 import 'core/theme/theme.dart';
 import 'core/theme/theme_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //===============================================================
-  DioHelper.init();
   //===============================================================
   await EasyLocalization.ensureInitialized();
   //===============================================================

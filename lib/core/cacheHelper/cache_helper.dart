@@ -6,7 +6,7 @@ class CacheHelper {
   static Future<void> init() async => await GetStorage.init();
 
   static Future<void> cacheUserInfo({required String userName}) async {
-    await _appBox.write('userName', userName);
+    await _appBox.write('userName', userName.trim());
   }
 
   static String? get getUserName {

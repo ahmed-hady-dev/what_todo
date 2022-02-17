@@ -4,6 +4,8 @@ import 'package:easy_localization/src/public_ext.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:what_todo/core/router/router.dart';
+import 'package:what_todo/widgets/delete_dialog.dart';
 import '../../constants/app_colors.dart';
 import '../home/controller/home_cubit.dart';
 import '../home/widgets/gradient_fab.dart';
@@ -94,7 +96,7 @@ class _TaskViewState extends State<TaskView> {
                             onSubmitted: (value) async {
                               if (value.isNotEmpty || value != '') {
                                 if (widget.task == null) {
-                                  Task _newTask = Task(title: value);
+                                  Task _newTask = Task(title: value.trim());
                                   _taskId =
                                       (await cubit.insertTask(task: _newTask))!;
                                   _contentVisible = true;
@@ -165,9 +167,17 @@ class _TaskViewState extends State<TaskView> {
                   primaryColor: AppColors.pinkColor,
                   secondaryColor: const Color(0xFFF54770),
                   onPressed: () async {
-                    if (_taskId == 0) return;
-                    await cubit.deleteTask(id: _taskId);
-                    Navigator.pop(context);
+                    showDialog(
+                      context: context,
+                      builder: (context) => DeleteDialog(
+                        onPressed: () async {
+                          if (_taskId == 0) return;
+                          await cubit.deleteTask(id: _taskId);
+                          MagicRouter.pop;
+                          MagicRouter.pop;
+                        },
+                      ),
+                    );
                   },
                 ),
               ],

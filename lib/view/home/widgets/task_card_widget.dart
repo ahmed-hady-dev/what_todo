@@ -28,7 +28,6 @@ class TaskCardWidget extends StatelessWidget {
     final bool isSubtitle = subTitle != null;
     final textStyle =
         Theme.of(context).textTheme.headline6!.copyWith(color: Colors.white);
-    final isFirstTaskCard = CacheHelper.read(key: 'isFirstTimeTaskCard');
     final isFirst = CacheHelper.read(key: 'isFirstTime');
     return FocusedMenuHolder(
       blurSize: 8.0,
@@ -53,7 +52,7 @@ class TaskCardWidget extends StatelessWidget {
                 const Icon(Icons.delete_forever_rounded, color: Colors.white)),
       ],
       onPressed: onTap,
-      child: isFirstTaskCard && isFirst
+      child: isFirst
           ? Showcase(
               key: Constant.taskKey,
               descTextStyle: textStyle,

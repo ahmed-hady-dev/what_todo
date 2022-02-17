@@ -43,7 +43,7 @@ class TodoRow extends StatelessWidget {
                 if (value != "") {
                   if (_taskId == 0) return;
                   Todo _newTodo =
-                      Todo(title: value, isDone: 0, taskId: _taskId);
+                      Todo(title: value.trim(), isDone: 0, taskId: _taskId);
                   await cubit.insertTodo(todo: _newTodo);
                   _todoFocus.requestFocus();
                   todoController.clear();

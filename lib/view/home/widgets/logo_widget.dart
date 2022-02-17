@@ -9,7 +9,7 @@ import 'package:what_todo/core/responsive_helper/responsive_layout.dart';
 import 'package:what_todo/core/theme/theme_cubit.dart';
 import 'package:what_todo/view/home/controller/home_cubit.dart';
 import 'package:what_todo/view/home/widgets/settings_model_sheet.dart';
-import 'package:what_todo/widgets/on_finished_dialog.dart';
+import 'package:what_todo/widgets/name_dialog.dart';
 
 class LogoWidget extends StatefulWidget {
   const LogoWidget({
@@ -45,8 +45,6 @@ class _LogoWidgetState extends State<LogoWidget>
   @override
   void initState() {
     super.initState();
-
-    CacheHelper.write(key: 'isFirstTimeTaskCard', value: true);
     if (CacheHelper.read(key: 'isFirstTime')) {
       WidgetsBinding.instance!.addPostFrameCallback(
         (_) => showDialog(
@@ -66,8 +64,7 @@ class _LogoWidgetState extends State<LogoWidget>
               MediaQuery.of(context).orientation == Orientation.landscape
                   ? landscapeList
                   : portraitList);
-        }).then((value) =>
-            CacheHelper.write(key: 'isFirstTimeTaskCard', value: false)),
+        }),
       );
     }
   }
